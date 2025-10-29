@@ -37,7 +37,7 @@ export const BottomNavigation: React.FC = () => {
   };
 
   return (
-    <nav className="items-center flex w-full text-sm text-white font-normal whitespace-nowrap text-center leading-[1.2] bg-black pt-4 pb-6 px-2 border-t-[rgba(113,104,96,0.30)] border-t border-solid fixed bottom-0 left-0 right-0">
+    <nav className="items-center flex w-full text-sm text-white font-normal whitespace-nowrap text-center leading-[1.2] bg-black pt-4 pb-6 px-2 border-t-[rgba(113,104,96,0.30)] border-t border-solid fixed bottom-0 left-0 right-0 z-50">
       {navItems.map((item) => (
         <button
           key={item.id}
