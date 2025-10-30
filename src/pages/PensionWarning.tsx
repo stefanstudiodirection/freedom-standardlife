@@ -17,7 +17,7 @@ export const PensionWarning: React.FC = () => {
     if (dontShowAgain) {
       localStorage.setItem('hidePensionWarning', 'true');
     }
-    navigate('/move-funds');
+    navigate('/select-destination', { state: { sourceAccount: 'pension' } });
   };
 
   const handleLearnMore = () => {

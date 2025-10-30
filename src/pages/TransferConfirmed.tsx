@@ -2,14 +2,21 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAccounts, AccountType } from '@/contexts/AccountContext';
 
 export const TransferConfirmed: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { amount, destination } = location.state || { 
-    amount: 0, 
-    destination: 'Savings' 
+  const { accounts } = useAccounts();
+  
+  const { amount, sourceAccount, destinationAccount, currency = 'GBP' } = location.state as {
+    amount: number;
+    sourceAccount: AccountType;
+    destinationAccount: AccountType;
+    currency?: string;
   };
+  
+  const destination = accounts[destinationAccount];
 
   const handleBackToHome = () => {
     navigate('/');
@@ -32,7 +39,7 @@ export const TransferConfirmed: React.FC = () => {
       </h1>
 
       <p className="text-base text-[#716860] text-center max-w-sm leading-relaxed mb-12">
-        You have successfully submitted a transfer request. £{amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} will arrive in 3-5 days to your {destination} account.
+        You have successfully transferred £{amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} to your {destination.name} account. The funds are now available.
       </p>
 
       {/* Spacer */}

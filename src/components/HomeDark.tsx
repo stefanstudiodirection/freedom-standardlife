@@ -4,9 +4,37 @@ import { Header } from "./Header";
 import { AccountCard } from "./AccountCard";
 import { PromotionCard } from "./PromotionCard";
 import { BottomNavigation } from "./BottomNavigation";
+import { useAccounts } from "@/contexts/AccountContext";
 
 export const HomeDark: React.FC = () => {
   const [showAllPromotions, setShowAllPromotions] = useState(false);
+  const { accounts } = useAccounts();
+
+  const formatBalance = (balance: number) => {
+    const parts = balance.toLocaleString('en-GB', { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2 
+    }).split('.');
+    
+    const wholePart = parts[0].replace('£', '');
+    const decimalPart = parts[1];
+    
+    return (
+      <span>
+        <span
+          style={{
+            fontFamily: "Arial, -apple-system, Roboto, Helvetica, sans-serif",
+            fontSize: "25px",
+            letterSpacing: "0.5px",
+          }}
+        >
+          £{wholePart}
+        </span>
+        .
+        <span style={{ fontSize: "17px", letterSpacing: "0.34px" }}>{decimalPart}</span>
+      </span>
+    );
+  };
 
   const handleSeeAllPromotions = () => {
     setShowAllPromotions(!showAllPromotions);
@@ -25,21 +53,7 @@ export const HomeDark: React.FC = () => {
               type="current"
               title="Current Account"
               subtitle="Funds available to spend"
-              amount={
-                <span>
-                  <span
-                    style={{
-                      fontFamily: "Arial, -apple-system, Roboto, Helvetica, sans-serif",
-                      fontSize: "25px",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    £95
-                  </span>
-                  0.
-                  <span style={{ fontSize: "17px", letterSpacing: "0.34px" }}>00</span>
-                </span>
-              }
+              amount={formatBalance(accounts.currentAccount.balance)}
               primaryAction="Card details"
               primaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/0d7398014e84f6d0301446900b81b658bf87b703?placeholderIfAbsent=true"
               secondaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/1a679bd7b3be1f0055ae6f39f41097bff967e2f1?placeholderIfAbsent=true"
@@ -50,21 +64,7 @@ export const HomeDark: React.FC = () => {
                 type="savings"
                 title="Savings"
                 subtitle="High Interest Savings (Tax Free)"
-                amount={
-                  <span>
-                    <span
-                      style={{
-                        fontFamily: "Arial, -apple-system, Roboto, Helvetica, sans-serif",
-                        fontSize: "25px",
-                        letterSpacing: "1.25px",
-                      }}
-                    >
-                      £
-                    </span>
-                    <span style={{ letterSpacing: "1.37px" }}>16,400.</span>
-                    <span style={{ fontSize: "17px", letterSpacing: "0.85px" }}>00</span>
-                  </span>
-                }
+                amount={formatBalance(accounts.savings.balance)}
                 primaryAction="Move Money"
                 primaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/8a14c4e95d0138ec00a7f594bbab4d3e9eefbd12?placeholderIfAbsent=true"
                 secondaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/dcd35badeac16ef7484b4ba3d04032841bc1108b?placeholderIfAbsent=true"
@@ -76,21 +76,7 @@ export const HomeDark: React.FC = () => {
                 type="pension"
                 title="Pension"
                 subtitle="Your Pension and Investments"
-                amount={
-                  <span>
-                    <span
-                      style={{
-                        fontFamily: "Arial, -apple-system, Roboto, Helvetica, sans-serif",
-                        fontSize: "25px",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      £48
-                    </span>
-                    ,750.
-                    <span style={{ fontSize: "17px", letterSpacing: "0.34px" }}>00</span>
-                  </span>
-                }
+                amount={formatBalance(accounts.pension.balance)}
                 primaryAction="Move Money"
                 primaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/51d83237c5d984d5c39a547fc4159fd1864483a6?placeholderIfAbsent=true"
                 secondaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/d1845d5ef8b1c1c6c38882a9950c20690465b2da?placeholderIfAbsent=true"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowDown, ChevronDown } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ArrowLeft, ArrowDown } from 'lucide-react';
+import { useAccounts, AccountType } from '@/contexts/AccountContext';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -29,14 +30,21 @@ const currencies: Record<string, Currency> = {
 
 export const MoveFunds: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState<string>('GBP');
   
-  const pensionBalance = 48750.00;
-  const savingsBalance = 16250.00;
+  const { sourceAccount, destinationAccount } = location.state as { 
+    sourceAccount: AccountType; 
+    destinationAccount: AccountType 
+  };
+  
+  const { accounts } = useAccounts();
+  const source = accounts[sourceAccount];
+  const destination = accounts[destinationAccount];
 
   const handleBack = () => {
-    navigate('/pension-warning');
+    navigate('/select-destination', { state: { sourceAccount } });
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,12 +57,13 @@ export const MoveFunds: React.FC = () => {
 
   const handleNext = () => {
     const numAmount = parseFloat(amount);
-    if (numAmount > 0 && numAmount <= pensionBalance) {
+    if (numAmount > 0 && numAmount <= source.balance) {
       navigate('/review-transfer', { 
         state: { 
           amount: numAmount,
-          pensionBalance,
-          savingsBalance
+          sourceAccount,
+          destinationAccount,
+          currency
         } 
       });
     }
@@ -62,7 +71,7 @@ export const MoveFunds: React.FC = () => {
 
   const isValidAmount = () => {
     const numAmount = parseFloat(amount);
-    return !isNaN(numAmount) && numAmount > 0 && numAmount <= pensionBalance;
+    return !isNaN(numAmount) && numAmount > 0 && numAmount <= source.balance;
   };
 
   const formatCurrency = (value: number) => {
@@ -135,17 +144,20 @@ export const MoveFunds: React.FC = () => {
           {/* Move From Card */}
           <div className="bg-[#211E1E] rounded-lg p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <span className="text-2xl">💰</span>
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: source.color }}
+              >
+                <span className="text-2xl">{source.icon}</span>
               </div>
               <div>
                 <p className="text-[#716860] text-sm">Move from</p>
-                <p className="text-white text-base font-medium">Pension</p>
+                <p className="text-white text-base font-medium">{source.name}</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-[#716860] text-sm">Balance</p>
-              <p className="text-white text-base font-medium">{formatCurrency(pensionBalance)}</p>
+              <p className="text-white text-base font-medium">{formatCurrency(source.balance)}</p>
             </div>
           </div>
 
@@ -159,17 +171,20 @@ export const MoveFunds: React.FC = () => {
           {/* Move To Card */}
           <div className="bg-[#211E1E] rounded-lg p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#A488F5] rounded-full flex items-center justify-center">
-                <span className="text-2xl">🐷</span>
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: destination.color }}
+              >
+                <span className="text-2xl">{destination.icon}</span>
               </div>
               <div>
                 <p className="text-[#716860] text-sm">Move to</p>
-                <p className="text-white text-base font-medium">Savings</p>
+                <p className="text-white text-base font-medium">{destination.name}</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-[#716860] text-sm">Balance</p>
-              <p className="text-white text-base font-medium">{formatCurrency(savingsBalance)}</p>
+              <p className="text-white text-base font-medium">{formatCurrency(destination.balance)}</p>
             </div>
           </div>
         </div>

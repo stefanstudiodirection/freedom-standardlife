@@ -43,6 +43,8 @@ export const AccountCard: React.FC<AccountCardProps> = ({
   const handlePrimaryAction = () => {
     if (type === 'pension') {
       navigate('/pension-warning');
+    } else if (type === 'savings' || type === 'current') {
+      navigate('/select-source');
     } else {
       setIsExpanded(!isExpanded);
     }

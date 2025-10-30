@@ -2,29 +2,46 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAccounts, AccountType } from '@/contexts/AccountContext';
 
 export const ReviewTransfer: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { amount, pensionBalance, savingsBalance } = location.state || { 
-    amount: 0, 
-    pensionBalance: 48750.00, 
-    savingsBalance: 16250.00 
+  const { accounts, transferFunds } = useAccounts();
+  
+  const { amount, sourceAccount, destinationAccount, currency = 'GBP' } = location.state as { 
+    amount: number;
+    sourceAccount: AccountType;
+    destinationAccount: AccountType;
+    currency?: string;
   };
 
-  const newPensionBalance = pensionBalance - amount;
-  const newSavingsBalance = savingsBalance + amount;
-  const retirementImpact = amount * 1.64; // Approximate lost growth multiplier
+  const source = accounts[sourceAccount];
+  const destination = accounts[destinationAccount];
+  
+  const newSourceBalance = source.balance - amount;
+  const newDestinationBalance = destination.balance + amount;
+  
+  // Show retirement impact warning only if pension is involved
+  const showRetirementWarning = sourceAccount === 'pension';
+  const retirementImpact = amount * 1.64;
 
   const handleBack = () => {
-    navigate('/move-funds');
+    navigate('/move-funds', { 
+      state: { sourceAccount, destinationAccount } 
+    });
   };
 
   const handleMoveFunds = () => {
+    // Execute the transfer
+    transferFunds(sourceAccount, destinationAccount, amount);
+    
     navigate('/transfer-confirmed', { 
       state: { 
         amount,
-        destination: 'Savings'
+        sourceAccount,
+        destinationAccount,
+        currency
       } 
     });
   };
@@ -64,18 +81,21 @@ export const ReviewTransfer: React.FC = () => {
           <div className="bg-[#211E1E] rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                  <span className="text-2xl">💰</span>
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: source.color }}
+                >
+                  <span className="text-2xl">{source.icon}</span>
                 </div>
                 <div>
                   <p className="text-[#716860] text-sm">Move from</p>
-                  <p className="text-white text-base font-medium">Pension</p>
+                  <p className="text-white text-base font-medium">{source.name}</p>
                 </div>
               </div>
               <div className="text-right">
                 <p className="text-[#716860] text-sm">Balance after transfer</p>
                 <p className="text-white text-base font-medium">
-                  £{newPensionBalance.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  £{newSourceBalance.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
             </div>
@@ -85,38 +105,43 @@ export const ReviewTransfer: React.FC = () => {
           <div className="bg-[#211E1E] rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#A488F5] rounded-full flex items-center justify-center">
-                  <span className="text-2xl">🐷</span>
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: destination.color }}
+                >
+                  <span className="text-2xl">{destination.icon}</span>
                 </div>
                 <div>
                   <p className="text-[#716860] text-sm">Move to</p>
-                  <p className="text-white text-base font-medium">Savings</p>
+                  <p className="text-white text-base font-medium">{destination.name}</p>
                 </div>
               </div>
               <div className="text-right">
                 <p className="text-[#716860] text-sm">Balance after transfer</p>
                 <p className="text-white text-base font-medium">
-                  £{newSavingsBalance.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  £{newDestinationBalance.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Retirement Impact Warning */}
-        <div className="bg-[#211E1E] rounded-lg p-4 mb-6">
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0">
-              <AlertTriangle className="w-6 h-6 text-[#E4B33D]" />
-            </div>
-            <div>
-              <h3 className="text-white text-base font-medium mb-2">Retirement impact</h3>
-              <p className="text-[#716860] text-sm leading-relaxed">
-                Taking £{amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} now equals £{retirementImpact.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} less at retirement due to lost growth
-              </p>
+        {/* Retirement Impact Warning - Only show if pension is involved */}
+        {showRetirementWarning && (
+          <div className="bg-[#211E1E] rounded-lg p-4 mb-6">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <AlertTriangle className="w-6 h-6 text-[#E4B33D]" />
+              </div>
+              <div>
+                <h3 className="text-white text-base font-medium mb-2">Retirement impact</h3>
+                <p className="text-[#716860] text-sm leading-relaxed">
+                  Taking £{amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} now equals £{retirementImpact.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} less at retirement due to lost growth
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Spacer to push button to bottom */}
         <div className="flex-1"></div>
