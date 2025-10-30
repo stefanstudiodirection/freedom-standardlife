@@ -15,7 +15,7 @@ export const HomeDark: React.FC = () => {
   return (
     <div className="justify-center items-stretch flex max-w-[480px] w-full flex-col overflow-hidden bg-black mx-auto min-h-screen pb-20">
       <div className="w-full">
-        <StatusBar />
+        {/* <StatusBar /> */}
 
         <Header />
 
@@ -143,10 +143,9 @@ export const HomeDark: React.FC = () => {
             )}
           </div>
         </section>
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto">
-        <BottomNavigation />
+        <div className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto">
+          <BottomNavigation />
+        </div>
       </div>
     </div>
   );
