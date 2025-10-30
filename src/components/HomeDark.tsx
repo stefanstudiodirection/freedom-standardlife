@@ -3,9 +3,11 @@ import { StatusBar } from "./StatusBar";
 import { Header } from "./Header";
 import { AccountCard } from "./AccountCard";
 import { PromotionCard } from "./PromotionCard";
+import { LearningResourceCard } from "./LearningResourceCard";
 import { BottomNavigation } from "./BottomNavigation";
 import { useAccounts } from "@/contexts/AccountContext";
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 export const HomeDark: React.FC = () => {
   const [showAllPromotions, setShowAllPromotions] = useState(false);
@@ -40,6 +42,14 @@ export const HomeDark: React.FC = () => {
 
   const handleSeeAllPromotions = () => {
     setShowAllPromotions(!showAllPromotions);
+  };
+
+  const handleNavigateToLearn = () => {
+    navigate('/learn');
+  };
+
+  const handleResourceClick = (resourceId: number) => {
+    console.log('Learning resource clicked:', resourceId);
   };
 
   return (
@@ -131,6 +141,39 @@ export const HomeDark: React.FC = () => {
             )}
           </div>
         </section>
+
+        <section className="w-full pb-6 px-4 mt-6" aria-label="Learning resources">
+          <div className="flex w-full items-center justify-between mb-4">
+            <h2 className="text-white text-[19px] font-normal">Learning resources</h2>
+            <button
+              onClick={handleNavigateToLearn}
+              className="flex items-center gap-1 text-lg text-[#A488F5] font-medium hover:text-[#9575e8] transition-colors"
+              aria-label="See all learning resources"
+            >
+              <span>See all</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="flex gap-4 overflow-x-auto">
+            <LearningResourceCard
+              title="5 Questions to Ask Before Accessing Your Pension Early"
+              image="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600"
+              onClick={() => handleResourceClick(1)}
+            />
+            <LearningResourceCard
+              title="The Secret to Growing Your Retirement Fund"
+              image="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600"
+              onClick={() => handleResourceClick(2)}
+            />
+            <LearningResourceCard
+              title="Should I Use My Pension for the..."
+              image="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600"
+              onClick={() => handleResourceClick(3)}
+            />
+          </div>
+        </section>
+
         <div className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto">
           <BottomNavigation />
         </div>
