@@ -137,7 +137,7 @@ const AccountDetail: React.FC = () => {
           <div className="mb-2 text-sm opacity-50">{config.display}</div>
           <div className="text-2xl mb-1 font-semibold">{config.display}</div>
           <div className="mb-4 text-sm opacity-80">{config.subtitle}</div>
-          <div className="rounded-lg bg-[#181818] flex items-center justify-between px-4 py-3 mb-4">
+          <div className="rounded-lg bg-[#E4B33D] flex items-center justify-between px-4 py-3 mb-4">
             <div className="flex items-center gap-2">{/* TODO: Icon if needed */}
               <span className="font-medium">Balance</span>
             </div>
