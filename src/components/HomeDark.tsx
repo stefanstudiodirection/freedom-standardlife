@@ -51,19 +51,14 @@ export const HomeDark: React.FC = () => {
 
         <main className="w-full mt-6 px-4">
           <section aria-label="Account overview" className="w-full">
-            <div onClick={() => navigate('/account/currentAccount')} style={{ cursor: 'pointer' }}>
-              <AccountCard
-                type="current"
-                title="Current Account"
-                subtitle="Funds available to spend"
-                amount={formatBalance(accounts.currentAccount.balance)}
-                primaryAction="Card details"
-                primaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/0d7398014e84f6d0301446900b81b658bf87b703?placeholderIfAbsent=true"
-                secondaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/1a679bd7b3be1f0055ae6f39f41097bff967e2f1?placeholderIfAbsent=true"
-              />
-            </div>
-
-            <div className="mt-[9px]" onClick={() => navigate('/account/savings')} style={{ cursor: 'pointer' }}>
+            <AccountCard
+              type="current"
+              title="Current Account"
+              subtitle="Funds available to spend"
+              amount={formatBalance(accounts.currentAccount.balance)}
+              onCardClick={() => navigate('/account/currentAccount')}
+            />
+            <div className="mt-[9px]">
               <AccountCard
                 type="savings"
                 title="Savings"
@@ -72,10 +67,11 @@ export const HomeDark: React.FC = () => {
                 primaryAction="Move Money"
                 primaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/8a14c4e95d0138ec00a7f594bbab4d3e9eefbd12?placeholderIfAbsent=true"
                 secondaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/dcd35badeac16ef7484b4ba3d04032841bc1108b?placeholderIfAbsent=true"
+                onPrimary={()=>navigate('/move-funds', {state: {sourceAccount: 'savings'}})}
+                onSecondary={()=>navigate('/account/savings')}
               />
             </div>
-
-            <div className="mt-[9px]" onClick={() => navigate('/account/pension')} style={{ cursor: 'pointer' }}>
+            <div className="mt-[9px]">
               <AccountCard
                 type="pension"
                 title="Pension"
@@ -84,6 +80,8 @@ export const HomeDark: React.FC = () => {
                 primaryAction="Move Money"
                 primaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/51d83237c5d984d5c39a547fc4159fd1864483a6?placeholderIfAbsent=true"
                 secondaryIcon="https://api.builder.io/api/v1/image/assets/TEMP/d1845d5ef8b1c1c6c38882a9950c20690465b2da?placeholderIfAbsent=true"
+                onPrimary={()=>navigate('/move-funds', {state: {sourceAccount: 'pension'}})}
+                onSecondary={()=>navigate('/account/pension')}
               />
             </div>
           </section>
