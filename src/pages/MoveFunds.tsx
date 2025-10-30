@@ -1,11 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowDown } from 'lucide-react';
+import { ArrowLeft, ArrowDown, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+type Currency = {
+  code: string;
+  symbol: string;
+  flag: string;
+  locale: string;
+};
+
+const currencies: Record<string, Currency> = {
+  GBP: { code: 'GBP', symbol: '£', flag: '🇬🇧', locale: 'en-GB' },
+  EUR: { code: 'EUR', symbol: '€', flag: '🇪🇺', locale: 'de-DE' },
+  USD: { code: 'USD', symbol: '$', flag: '🇺🇸', locale: 'en-US' },
+};
 
 export const MoveFunds: React.FC = () => {
   const navigate = useNavigate();
-  const [amount, setAmount] = useState('0.00');
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState<string>('GBP');
   
   const pensionBalance = 48750.00;
   const savingsBalance = 16250.00;
@@ -14,28 +35,11 @@ export const MoveFunds: React.FC = () => {
     navigate('/pension-warning');
   };
 
-  const handleKeypadClick = (value: string) => {
-    if (value === 'backspace') {
-      if (amount.length > 1) {
-        const newAmount = amount.slice(0, -1);
-        setAmount(newAmount === '' ? '0.00' : newAmount);
-      }
-    } else {
-      // Remove leading zeros and format
-      let newAmount = amount.replace('.', '');
-      if (newAmount === '000') {
-        newAmount = value;
-      } else {
-        newAmount = newAmount + value;
-      }
-      // Insert decimal point
-      if (newAmount.length === 1) {
-        setAmount(`0.0${newAmount}`);
-      } else if (newAmount.length === 2) {
-        setAmount(`0.${newAmount}`);
-      } else {
-        setAmount(`${newAmount.slice(0, -2)}.${newAmount.slice(-2)}`);
-      }
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only numbers and decimal point
+    if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+      setAmount(value);
     }
   };
 
@@ -54,7 +58,15 @@ export const MoveFunds: React.FC = () => {
 
   const isValidAmount = () => {
     const numAmount = parseFloat(amount);
-    return numAmount > 0 && numAmount <= pensionBalance;
+    return !isNaN(numAmount) && numAmount > 0 && numAmount <= pensionBalance;
+  };
+
+  const formatCurrency = (value: number) => {
+    const selectedCurrency = currencies[currency];
+    return `${selectedCurrency.symbol}${value.toLocaleString(selectedCurrency.locale, { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2 
+    })}`;
   };
 
   return (
@@ -75,19 +87,43 @@ export const MoveFunds: React.FC = () => {
         {/* Amount Input Section */}
         <div className="flex flex-col items-center mb-6">
           <p className="text-[#716860] text-base mb-4">Enter amount to move</p>
-          <div className="text-6xl font-normal tracking-tight text-[#716860]">
-            {amount}
-            <span className="animate-pulse">|</span>
-          </div>
+          <input
+            type="tel"
+            inputMode="decimal"
+            value={amount}
+            onChange={handleAmountChange}
+            placeholder="0.00"
+            className="text-6xl font-normal tracking-tight text-white bg-transparent border-none outline-none text-center w-full"
+            style={{ caretColor: '#A488F5' }}
+            autoFocus
+          />
           
           {/* Currency Selector */}
-          <button className="mt-4 flex items-center gap-2 bg-[#211E1E] px-4 py-2 rounded-full">
-            <span className="text-2xl">🇬🇧</span>
-            <span className="text-white text-sm">GBP (£)</span>
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+          <Select value={currency} onValueChange={setCurrency}>
+            <SelectTrigger className="mt-4 w-auto bg-[#211E1E] border-none text-white hover:bg-[#2a2626] transition-colors">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">{currencies[currency].flag}</span>
+                <SelectValue>
+                  {currency} ({currencies[currency].symbol})
+                </SelectValue>
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="bg-[#211E1E] border-[#2a2626] text-white">
+              {Object.entries(currencies).map(([code, curr]) => (
+                <SelectItem 
+                  key={code} 
+                  value={code}
+                  className="hover:bg-[#2a2626] focus:bg-[#2a2626] focus:text-white cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{curr.flag}</span>
+                    <span>{code} ({curr.symbol})</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Transfer Cards */}
@@ -105,7 +141,7 @@ export const MoveFunds: React.FC = () => {
             </div>
             <div className="text-right">
               <p className="text-[#716860] text-sm">Balance</p>
-              <p className="text-white text-base font-medium">£{pensionBalance.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-white text-base font-medium">{formatCurrency(pensionBalance)}</p>
             </div>
           </div>
 
@@ -129,7 +165,7 @@ export const MoveFunds: React.FC = () => {
             </div>
             <div className="text-right">
               <p className="text-[#716860] text-sm">Balance</p>
-              <p className="text-white text-base font-medium">£{savingsBalance.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-white text-base font-medium">{formatCurrency(savingsBalance)}</p>
             </div>
           </div>
         </div>
@@ -147,44 +183,6 @@ export const MoveFunds: React.FC = () => {
           >
             Next
           </Button>
-        </div>
-
-        {/* Numeric Keypad */}
-        <div className="mt-6 grid grid-cols-3 gap-2">
-          {[
-            { num: '1', letters: '' },
-            { num: '2', letters: 'ABC' },
-            { num: '3', letters: 'DEF' },
-            { num: '4', letters: 'GHI' },
-            { num: '5', letters: 'JKL' },
-            { num: '6', letters: 'MNO' },
-            { num: '7', letters: 'PQRS' },
-            { num: '8', letters: 'TUV' },
-            { num: '9', letters: 'WXYZ' }
-          ].map((key) => (
-            <button
-              key={key.num}
-              onClick={() => handleKeypadClick(key.num)}
-              className="bg-[#211E1E] h-14 rounded-lg hover:bg-[#2a2626] transition-colors flex flex-col items-center justify-center"
-            >
-              <span className="text-white text-xl">{key.num}</span>
-              {key.letters && <span className="text-[#716860] text-xs">{key.letters}</span>}
-            </button>
-          ))}
-          <button
-            onClick={() => handleKeypadClick('0')}
-            className="bg-[#211E1E] h-14 rounded-lg hover:bg-[#2a2626] transition-colors col-start-2"
-          >
-            <span className="text-white text-xl">0</span>
-          </button>
-          <button
-            onClick={() => handleKeypadClick('backspace')}
-            className="bg-[#211E1E] h-14 rounded-lg hover:bg-[#2a2626] transition-colors flex items-center justify-center"
-          >
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
-            </svg>
-          </button>
         </div>
       </div>
     </div>
