@@ -12,6 +12,7 @@ import ReviewTransfer from "./pages/ReviewTransfer";
 import TransferConfirmed from "./pages/TransferConfirmed";
 import NotFound from "./pages/NotFound";
 import AccountDetail from "./pages/AccountDetail";
+import SelectDestination from "./pages/SelectDestination";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/pension-warning" element={<PensionWarning />} />
+            <Route path="/select-destination" element={<SelectDestination />} />
             <Route path="/move-funds" element={<MoveFunds />} />
             <Route path="/review-transfer" element={<ReviewTransfer />} />
             <Route path="/transfer-confirmed" element={<TransferConfirmed />} />

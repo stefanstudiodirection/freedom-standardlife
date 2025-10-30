@@ -66,7 +66,7 @@ const AccountDetail: React.FC = () => {
     .sort((a, b) => b.date.getTime() - a.date.getTime());
 
   const handleMoveFunds = () => {
-    navigate('/move-funds', {
+    navigate('/select-destination', {
       state: {
         sourceAccount: accountId
       }
