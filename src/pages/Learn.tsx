@@ -42,7 +42,7 @@ const Learn: React.FC = () => {
       </button>
       <h1 className="text-2xl font-semibold mb-4">Learning Resources</h1>
       
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="grid grid-cols-2 gap-4 pb-4">
         {mockArticles.map((article) => (
           <LearningResourceCard
             key={article.id}
