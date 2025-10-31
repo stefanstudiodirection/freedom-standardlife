@@ -177,7 +177,7 @@ const AccountDetail: React.FC = () => {
             </div>
           )}
           {config.moveFundsButton && (
-            <button onClick={handleMoveFunds} className="w-full py-3 bg-[#A488F5] rounded-lg mb-4 font-semibold text-black text-base">Move funds</button>
+            <button onClick={handleMoveFunds} className="w-full py-3  rounded-lg mb-4 font-semibold text-black text-base" style={{ backgroundColor: account.color }}>Move funds</button>
           )}
           {/* TRANSACTIONS */}
           <div className="mt-6">
