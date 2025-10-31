@@ -97,7 +97,7 @@ const Transactions: React.FC = () => {
             className="flex items-center gap-4 py-4 border-b border-[#E5E5EA] dark:border-[#2C2C2E] cursor-pointer hover:bg-[#E5E5EA] dark:hover:bg-[#1C1C1E]/30 transition-colors"
             onClick={() => {/* Could navigate to transaction detail */}}
           >
-            <div className="w-12 h-12 rounded-lg bg-[#F3F3F3] dark:bg-[#2C2C2E] flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-lg bg-white dark:bg-[#2C2C2E] flex items-center justify-center flex-shrink-0">
               {getTransactionIcon(transaction.type)}
             </div>
             <div className="flex-1 min-w-0">
