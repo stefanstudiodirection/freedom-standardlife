@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
   {
     id: "budgeting",
     label: "Budgeting",
-    path: "/",
+    path: "/budgeting",
     icon: <ChartPieIcon className="w-6 h-6" />,
   },
   {
