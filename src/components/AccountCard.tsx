@@ -1,27 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { MercerLogo } from './MercerLogo';
+import { ArrowRight } from 'lucide-react';
 
 interface AccountCardProps {
   type: 'current' | 'savings' | 'pension';
-  title: string;
+  accountName: string;
   subtitle: string;
-  amount: React.ReactNode;
-  primaryAction: string;
-  primaryIcon: string;
-  secondaryIcon: string;
+  balance: React.ReactNode;
+  onClick: () => void;
 }
 
 export const AccountCard: React.FC<AccountCardProps> = ({
   type,
-  title,
+  accountName,
   subtitle,
-  amount,
-  primaryAction,
-  primaryIcon,
-  secondaryIcon
+  balance,
+  onClick
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const navigate = useNavigate();
 
   const getBackgroundColor = () => {
     switch (type) {
@@ -36,7 +31,11 @@ export const AccountCard: React.FC<AccountCardProps> = ({
     }
   };
 
-   const getPaddingClass = () => {
+  const getTextColor = () => {
+    return type === 'pension' ? 'text-white' : 'text-[#211E1E]';
+  };
+
+  const getPaddingClass = () => {
     if (type === 'pension' || type === 'savings') {
       return 'p-4 pb-[40px]';
     }
@@ -56,83 +55,53 @@ export const AccountCard: React.FC<AccountCardProps> = ({
     }
   };
 
-  const getTextColor = () => {
-    return type === 'pension' ? 'text-white' : 'text-[#211E1E]';
-  };
-
-  const handlePrimaryAction = () => {
-    if (type === 'current') {
-      navigate('/account/currentAccount');
-    } else if (type === 'savings') {
-      navigate('/move-funds', { 
-        state: { 
-          sourceAccount: 'savings', 
-          destinationAccount: 'currentAccount' 
-        } 
-      });
-    } else if (type === 'pension') {
-      const hidePensionWarning = localStorage.getItem('hidePensionWarning');
-      if (hidePensionWarning === 'true') {
-        navigate('/move-funds', { 
-          state: { 
-            sourceAccount: 'pension', 
-            destinationAccount: 'savings' 
-          } 
-        });
-      } else {
-        navigate('/pension-warning');
-      }
-    }
-  };
-
-  const handleSecondaryAction = () => {
-    console.log(`Secondary action for ${type} account`);
-  };
-
   return (
-    <article className={`w-full ${getBackgroundColor()} p-4 rounded-[9.142px] ${type === 'pension' ? 'rounded-[9px]' : ''}`}>
-      <div className={`flex w-full items-stretch gap-${type === 'pension' ? '5' : '1'} ${getTextColor()} font-normal justify-between`}>
-        <div className={type === 'current' ? 'w-[188px]' : ''}>
-          <h2 className={`${getTextColor()} text-[28px] leading-none`}>
-            {title}
-          </h2>
-          <p className={`${getTextColor()} text-base leading-none mt-3`}>
-            {subtitle}
-          </p>
-        </div>
-        <div className="flex flex-col text-[27px] tracking-[0.55px] leading-none">
-          <div className={getTextColor()}>
-            {amount}
-          </div>
+    <article 
+      onClick={onClick}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      className={`w-full ${getBackgroundColor()} ${getPaddingClass()} ${getZIndex()} rounded-[9px] cursor-pointer transition-opacity relative`}
+    >
+      {/* Top section: Logo | Balance */}
+      <div className="flex justify-between items-start mb-3">
+        <MercerLogo className={getTextColor()} />
+        <div className={`text-[20px] ${getTextColor()} font-normal leading-none tracking-[0.55px]`}>
+          {balance}
         </div>
       </div>
-      <div className="flex w-full gap-[40px_100px] justify-between mt-3">
-        <button 
-          className="items-center flex gap-1.5 text-sm text-white font-normal leading-none bg-black pl-2.5 pr-3 py-2 rounded-[30.472px] hover:bg-gray-800 transition-colors"
-          onClick={handlePrimaryAction}
-          aria-expanded={isExpanded}
-        >
-          <img
-            src={primaryIcon}
-            className="aspect-[1] object-contain w-4 self-stretch shrink-0 my-auto"
-            alt=""
-          />
-          <span className="text-white self-stretch my-auto">
-            {primaryAction}
-          </span>
-        </button>
-        <button 
-          className="justify-center items-center flex min-h-8 gap-2 w-8 h-8 bg-black px-2 rounded-[400px] hover:bg-gray-800 transition-colors"
-          onClick={handleSecondaryAction}
-          aria-label="More options"
-        >
-          <img
-            src={secondaryIcon}
-            className="aspect-[1] object-contain w-4 self-stretch my-auto"
-            alt=""
-          />
-        </button>
+
+      {/* Middle section: Account name + Subtitle */}
+      <div>
+        <h2 className={`${getTextColor()} text-[18px] font-medium leading-tight`}>
+          {accountName}
+        </h2>
+        <p className={`${getTextColor()} text-sm mt-1 leading-tight`}>
+          {subtitle}
+        </p>
       </div>
+
+      {/* Bottom section: Only for Current Account */}
+      {type === 'current' && (
+        <div className="flex justify-between items-center mt-3 pt-3 border-t border-[#211E1E]/10">
+          <span className="text-sm text-[#211E1E]">Funds available to spend</span>
+          <button 
+            className="flex items-center gap-1 text-sm text-[#211E1E] font-medium"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick();
+            }}
+          >
+            See more
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </article>
   );
 };
