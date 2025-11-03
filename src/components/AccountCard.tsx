@@ -39,7 +39,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 	};
 
 	const getPaddingClass = () => {
-		if (type === "current" || type === "savings") {
+		if (type === "pension" || type === "savings") {
 			return "p-4 pb-[40px]";
 		}
 		return "p-4";
@@ -47,11 +47,11 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 
 	const getZIndex = () => {
 		switch (type) {
-			case "current":
+			case "pension":
 				return "z-10";
 			case "savings":
 				return "z-20";
-			case "pension":
+			case "current":
 				return "z-30";
 			default:
 				return "z-0";
