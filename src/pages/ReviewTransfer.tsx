@@ -195,9 +195,6 @@ export const ReviewTransfer: React.FC = () => {
 					</div>
 				)}
 
-				{/* Spacer to push button to bottom */}
-				<div className="flex-1"></div>
-
 				{/* Move Funds Button */}
 				<div className="mt-6">
 					<Button
