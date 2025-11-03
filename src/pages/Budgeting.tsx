@@ -381,21 +381,32 @@ const Budgeting: React.FC = () => {
 				>
 					<SelectTrigger className="w-full mb-6 bg-white dark:bg-[#211E1E] border-border h-20 [&>span]:pointer-events-auto">
 						<SelectValue>
-							<div className="flex items-center gap-3">
-								<div
-									className="w-10 h-10 flex items-center justify-center rounded-[4px] bg-[#F3F3F3] dark:bg-black text-2xl"
-									style={{
-										color: account.color,
-										lineHeight: 1,
-									}}
-								>
-									{account.icon}
+							<div className="flex items-center justify-between w-full gap-4">
+								{/* Left side - Icon and Account info */}
+								<div className="flex items-center gap-3">
+									<div
+										className="w-14 h-14 flex items-center justify-center rounded-2xl bg-black text-3xl"
+										style={{
+											color: account.color,
+											lineHeight: 1,
+										}}
+									>
+										{account.icon}
+									</div>
+									<div className="flex flex-col items-start">
+										<span className="text-sm text-muted-foreground">
+											Account
+										</span>
+										<span className="font-semibold text-foreground text-lg">
+											{account.name}
+										</span>
+									</div>
 								</div>
-								<div className="flex flex-col items-start">
-									<span className="font-medium text-foreground">
-										{account.name}
-									</span>
-									<span className="text-sm text-muted-foreground">
+
+								{/* Right side - Balance info */}
+								<div className="flex flex-col items-end">
+									<span className="text-sm text-muted-foreground">Balance</span>
+									<span className="font-semibold text-foreground text-lg">
 										{formatCurrency(account.balance)}
 									</span>
 								</div>
