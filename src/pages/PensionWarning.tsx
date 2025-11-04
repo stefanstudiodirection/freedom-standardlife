@@ -28,8 +28,8 @@ export const PensionWarning: React.FC = () => {
 	};
 
 	const handleLearnMore = () => {
-		// Open educational content
-		console.log("Opening educational content");
+		navigate('/learn/3');
+		// console.log("Opening educational content");
 	};
 
 	return (
