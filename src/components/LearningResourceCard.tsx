@@ -21,7 +21,7 @@ export const LearningResourceCard: React.FC<LearningResourceCardProps> = ({
         alt={title}
         className="aspect-[16/10] w-full object-cover rounded-lg"
       />
-      <h3 className="text-foreground text-lg leading-snug pt-3 text-left">
+      <h3 className="text-foreground leading-snug pt-3 text-left text-base">
         {title}
       </h3>
     </button>

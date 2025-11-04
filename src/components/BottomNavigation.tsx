@@ -64,16 +64,16 @@ export const BottomNavigation: React.FC = () => {
         <button
           key={item.id}
           className={`self-stretch flex flex-col items-center flex-1 shrink basis-[0%] my-auto hover:opacity-80 transition-opacity ${
-            isActive(item.path) ? "text-[#A488F5]" : "text-[#BCBBBB] dark:text-gray-400"
+            isActive(item.path) ? "text-[#A488F5]" : "text-[#716860] dark:text-gray-400"
           }`}
           onClick={() => navigate(item.path)}
           aria-pressed={isActive(item.path)}
           disabled={item.id === "profile"}
         >
-          <div className={isActive(item.path) ? "text-[#A488F5]" : "text-[#BCBBBB] dark:text-gray-400"}>
+          <div className={isActive(item.path) ? "text-[#A488F5]" : "text-[#716860] dark:text-gray-400"}>
             {item.icon}
           </div>
-          <span className={`mt-1 text-xs ${isActive(item.path) ? "text-[#A488F5]" : "text-[#BCBBBB] dark:text-gray-400"}`}>
+          <span className={`mt-1 text-xs ${isActive(item.path) ? "text-[#A488F5]" : "text-[#716860] dark:text-gray-400"}`}>
             {item.label}
           </span>
         </button>
