@@ -72,7 +72,7 @@ export const SavingsWarning: React.FC = () => {
 				</h2>
 
 				{/* Important Information Section */}
-				<div className="flex-1">
+				<div className="">
 					<h3 className="text-base font-normal mb-4">
 						Important things to know:
 					</h3>
@@ -113,7 +113,7 @@ export const SavingsWarning: React.FC = () => {
 					{/* Continue Button */}
 					<Button
 						onClick={handleContinue}
-						className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white font-medium text-base rounded-xl"
+						className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white font-medium text-base rounded-lg"
 					>
 						Submit request
 					</Button>
