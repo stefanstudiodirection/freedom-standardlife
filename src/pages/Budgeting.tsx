@@ -464,7 +464,7 @@ const Budgeting: React.FC = () => {
 										<span className="text-base text-muted-foreground">
 											Account
 										</span>
-										<span className="text-foreground text-lg">
+										<span className="text-foreground text-base">
 											{account.name}
 										</span>
 									</div>
