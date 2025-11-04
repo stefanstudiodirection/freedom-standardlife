@@ -77,7 +77,7 @@ export const PensionWarning: React.FC = () => {
 				</h2>
 
 				{/* Important Information Section */}
-				<div className="flex-1">
+				<div className="">
 					<h3 className="text-base font-normal mb-4">
 						Important things to know:
 					</h3>
@@ -120,7 +120,7 @@ export const PensionWarning: React.FC = () => {
 					{/* Learn More Link */}
 					<button
 						onClick={handleLearnMore}
-						className="w-auto inline-flex items-center gap-2 px-6 py-3 border border-white/20 rounded-md bg-[#211E1E] hover:bg-[#211E1E]/80 transition-colors mb-6 text-white"
+						className="w-auto inline-flex items-center gap-2 px-6 py-3 border border-white/20 rounded-md bg-[#211E1E] hover:bg-[#211E1E]/80 transition-colors text-white"
 					>
 						<span className="text-sm">Learn more about this topic</span>
 						<ExternalLink className="w-4 h-4" />
