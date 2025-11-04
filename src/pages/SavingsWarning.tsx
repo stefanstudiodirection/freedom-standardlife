@@ -109,7 +109,7 @@ export const SavingsWarning: React.FC = () => {
           <button
 						className="w-auto inline-flex items-center gap-2 px-6 py-3 border border-white/20 rounded-md bg-[#211E1E] hover:bg-[#211E1E]/80 transition-colors text-white"
 					>
-						<span className="text-sm">Learn more about this topic</span>
+						<span className="text-lg">Learn more about this topic</span>
 						<ExternalLink className="w-4 h-4" />
 					</button>
 				</div>
