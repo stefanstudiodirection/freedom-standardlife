@@ -6,24 +6,19 @@ import { BottomNavigation } from '@/components/BottomNavigation';
 
 const mockArticles = [
   {
-    id: '1',
-    title: 'Why £1 Today Could Mean £1.60 Less Tomorrow',
-    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200'
-  },
-  {
     id: '2',
-    title: '5 Questions to Ask Before Accessing Your Pension Early',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600'
+    title: 'Questions to ask about dawing down',
+    image: '/content-hub/woman-with-smile.webp'
   },
   {
     id: '3',
     title: 'The Secret to Growing Your Retirement Fund',
-    image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600'
+    image: '/content-hub/happy-couple.webp'
   },
   {
     id: '4',
-    title: 'Should I Use My Pension for the...',
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600'
+    title: 'Should I Really Touch My Pension? A Guide for the Under-55s',
+    image: '/content-hub/man-smiling.webp'
   }
 ];
 
